@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
-import { Checkbox, Button, Modal, Tag, Typography } from 'antd';
-import { StarOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Todo } from '../types/todo.types';
+import {Button, Checkbox, Modal, Tag, Typography} from 'antd';
+import {DeleteOutlined, StarOutlined} from '@ant-design/icons';
+import {Status, Todo} from '../types/todo.types';
 
 const { Text, Paragraph } = Typography;
 
@@ -10,7 +10,12 @@ interface TodoItemProps {
   todo: Todo;
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
-  onFavorite: (id: number) => void;
+  onFavorite?: (id: number) => void;
+  onToggleFavorite?: (id: number) => void;
+}
+
+interface TodoTextProps {
+  status: Status;
 }
 
 const TodoItemWrapper = styled.div`
@@ -30,7 +35,7 @@ const TodoItemWrapper = styled.div`
   }
 `;
 
-const TodoText = styled.span<{ status: string }>`
+const TodoText = styled.span<TodoTextProps>`
   margin-left: 12px;
   flex: 1;
   text-decoration: ${props => props.status === 'done' ? 'line-through' : 'none'};
@@ -50,7 +55,7 @@ const TodoDetails = styled.div`
   }
 `;
 
-const getStatusColor = (status: string) => {
+const getStatusColor = (status: Status) => {
   switch (status) {
     case 'done':
       return 'success';
@@ -94,7 +99,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, onFavorit
           <Button
             type="text"
             icon={<StarOutlined style={{ color: isFavorite ? '#fadb14' : undefined }} />}
-            onClick={() => onFavorite(id)}
+            onClick={() => onFavorite?.(id)}
           />
           <Button
             type="text"
@@ -114,9 +119,11 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, onFavorit
         <TodoDetails>
           <Paragraph>
             <Text strong>Статус: </Text>
-            <Tag color={getStatusColor(status)}>{status.toUpperCase()}</Tag>
+            <Tag color={getStatusColor(status)}>
+              {status?.toUpperCase()}
+            </Tag>
           </Paragraph>
-          
+
           {description && (
             <Paragraph>
               <Text strong>Описание: </Text>
@@ -124,12 +131,12 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete, onFavorit
               {description}
             </Paragraph>
           )}
-          
+
           <Paragraph>
             <Text strong>Создано: </Text>
             {formatDate(createdAt)}
           </Paragraph>
-          
+
           <Paragraph>
             <Text strong>Обновлено: </Text>
             {formatDate(updatedAt)}

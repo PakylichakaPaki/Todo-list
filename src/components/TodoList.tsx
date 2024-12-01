@@ -37,7 +37,7 @@ const TodoList: React.FC = () => {
   const filteredTodos = todos.filter(todo => {
     // Сначала фильтруем по поисковому запросу
     const matchesSearch = searchText
-      ? todo.attributes.name.toLowerCase().includes(searchText) ||
+      ? todo.attributes.name?.toLowerCase().includes(searchText) ||
         (todo.attributes.description?.toLowerCase()?.includes(searchText) ?? false)
       : true;
 
@@ -67,8 +67,8 @@ const TodoList: React.FC = () => {
   return (
     <TodoListWrapper>
       {filteredTodos.length === 0 ? (
-        <Empty 
-          description={searchText ? "Ничего не найдено" : "Нет задач"} 
+        <Empty
+          description={searchText ? "Ничего не найдено" : "Нет задач"}
           style={{ padding: '20px' }}
         />
       ) : (

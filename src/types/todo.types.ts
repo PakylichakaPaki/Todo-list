@@ -1,11 +1,13 @@
 export interface TodoAttributes {
   name: string | null;
   description: string | null;
-  status: 'done' | 'open' | 'working' | null;
+  status: Status;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
 }
+
+export type Status = 'done' | 'open' | 'working' | null;
 
 export interface Todo {
   id: number;
